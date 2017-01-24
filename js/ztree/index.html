@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../jquery-1.9.1.js"></script>
+    <script src="js/jquery.ztree.all.min.js"></script>
+    <script src="js/ztree_extends.js"></script>
+    <link href="css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <script type="text/javascript">
+
+    </script>
+
+    <style>        
+        html, body {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="content" style="min-height:100%;">
+
+   城市：<input tag="citysel" class="cityClass" type="text" value=""
+                    style="width: 120px;" /> <input type="button" onclick="getValue(this)" />
+
+        <br />
+        <br />
+        <br />
+   城市1：<input tag="citysel" class="cityClass" type="text" value=""
+                    style="width: 120px;" /><input type="button" onclick="getValue(this)" />
+        <br />
+        <br />
+        <br />
+   城市2：<input id="citySel1" class="cityClass" type="text" value=""
+                    style="width: 120px;" />
+    
+    <br /><br /><br />
+        <input type="button" onclick="add()" value="add" />
+        <script type="text/javascript">
+            function add() {
+                var html = '<br /><br /><br /><br /><input tag="citysel" class="cityClass" type="text" value="" style="width: 120px;" />';
+                $("#content").append(html);
+
+            }
+        </script>
+  </div>
+               
+    
+    <script type="text/javascript">
+        var data = [
+            { id: 0, pId: 0, name: "全国",myattr:"quanguo" , open: true, chkDisabled: true },
+            { id: 1, pId: 0, name: "北京",myattr:"beijing" },
+            { id: 2, pId: 0, name: "天津", myattr: "tianjin" },
+            { id: 3, pId: 0, name: "上海", myattr: "shanghai" },
+            { id: 6, pId: 0, name: "重庆" },
+            { id: 4, pId: 0, name: "河北省", open: true, chkDisabled: true },
+            { id: 41, pId: 4, name: "石家庄" },
+            { id: 42, pId: 4, name: "保定" },
+            { id: 43, pId: 4, name: "邯郸邯郸邯郸邯郸邯郸邯郸邯郸邯郸邯郸邯郸" },
+            { id: 44, pId: 4, name: "承德" },
+            { id: 5, pId: 0, name: "广东省", open: true, chkDisabled: true },
+            { id: 51, pId: 5, name: "广州" },
+            { id: 52, pId: 5, name: "深圳广" },
+            { id: 53, pId: 5, name: "东广莞" },
+            { id: 54, pId: 5, name: "佛山" },
+            { id: 6, pId: 0, name: "福建省", open: true, chkDisabled: true },
+            { id: 61, pId: 6, name: "福州" },
+            { id: 62, pId: 6, name: "厦门" },
+            { id: 63, pId: 6, name: "泉州" },
+            { id: 64, pId: 6, name: "三明" }
+        ];
+    </script>
+    <script type="text/javascript">
+	    var option={};
+		option.data=data; //必传
+        option.showsearchchild = false;
+        option.callback = callback;
+        option.clearcallback = clearcallback;
+		option.width=180;
+		option.height=400;
+        new ztree_extends().init($("[tag='citysel']"), option);
+        new ztree_extends().init($("#citySel1"), {data:data,showsearchchild:false});
+
+        
+        
+        function getValue(_obj) {
+            var obj = $(_obj).prev();
+            console.log(obj);
+            //取值时在json属性名前+p取input属性值  如：p_id
+            alert("p_name:" + obj.attr("p_name") + "   p_myattr:" + obj.attr("p_myattr"));
+        }
+
+        function callback(nodes,obj) {
+            var newpid = nodes[0].id;
+            var oldpid = obj.attr("p_id");
+            if (newpid == oldpid) {
+                alert("一样的，啥也不干");
+                return false;
+            }
+            //啥都干的时候的代码
+            alert("为" + nodes[0].name + "干了点啥");
+            return true;
+        }
+
+        function clearcallback() {
+            if (confirm("清空会清除其它东西，要清空么？")) {
+                alert("清空了其它的东西");
+                return true;
+            }
+            else {
+                return false;
+            }
+            return true;            
+        }
+    </script>
+</body>
+</html>

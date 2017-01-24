@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="js/select2_extends.js"></script>
+    <script type="text/javascript" src="js/select2.full.js"></script>
+    <link href="css/select2.full.css" rel="stylesheet" />
+    <style>
+        html, body {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="content" style="min-height:100%;">
+
+    <input type="button" onclick="add()" value="add" /><br />
+    <input tag="txt" type="text" style="width:200px;cursor:pointer" data="1,北京;2,上海"/><br /><br />
+    <input tag="txt" type="text" style="width:200px;cursor:pointer" data="2,上海,上海"/><br /> <br />
+    <input tag="txt" type="text" style="width:200px;cursor:pointer"/><br /><br />
+        
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+		    select2_extends.init($("[tag='txt']"), {url:"/ajax.aspx", width:50, delay:200, callback:function(){}});
+            //select2_extends.init("jquery表达式", "ajax请求url",录入时发起查询间隔时间ms默认250,回调函数);
+        });
+
+        function add() {
+            var html = '<input tag="txt" type="text" style="width:200px;cursor:pointer"/><br /><br />';
+            $("#content").append(html);
+        }
+
+        
+    </script>
+</body>
+</html>

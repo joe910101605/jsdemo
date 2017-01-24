@@ -1,0 +1,221 @@
+<html>
+
+<link href="easyui/themes/icon.css" rel="stylesheet" />
+<link href="easyui/themes/color.css" rel="stylesheet" />
+<link href="easyui/themes/gray/easyui.css" rel="stylesheet" />
+<script type="text/javascript" src="easyui/jquery.min.js"></script>
+<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="column_select.js"></script>
+
+<input type="button" value="自定义表头" id="selcolbtn">
+<!--<input type="button" value="get" onclick="get()">-->
+<script type="text/javascript">
+    $(function () {
+        init();
+    });
+
+    var s = null;
+    function init() {
+        var frozenColumns=[
+            { field: 'order_id', title: "订单号",sortable:true , width: "105px" },
+            {
+                field: 'order_date', title: "订单日期",sortable:true , width: "70px", formatter: function (val, row, index) {
+                if (val == null)return "";
+                return new Date(val).Format("yyyy-MM-dd");
+            }
+            },
+            { field: 'vin', title: "车架号",sortable:true , width: "130px" },
+            { field: 'brand_name', title: "品牌",sortable:true , width: "60px" },
+            { field: 'series_name', title: "车系",sortable:true , width: "60px" },
+            { field: 'dealer_name', title: "经销商",sortable:true , width: "60px" },
+            {
+                field: 'balance_type', title: "结算类型",sortable:true , width: "80px",formatter:function(val,row,index){
+                if (row.balance_type == 1) {
+                    return '顾问返利';
+                }
+                if (row.balance_type == 2) {
+                    return '经销商返利';
+                }
+                if (row.balance_type ==3) {
+                    return 'OP订单结算';
+                }
+                if (row.balance_type ==4 ) {
+                    return 'OP优惠券结算';
+                }
+                if (row.balance_type ==5 ) {
+                    return 'B2C订单结算';
+                }
+                if (row.balance_type ==6 ) {
+                    return 'B2C订单优惠券结算';
+                }
+                if (row.balance_type ==7 ) {
+                    return '店总返利';
+                }
+                if (row.balance_type ==8 ) {
+                    return '销售经理返利';
+                }
+                }
+                },
+                { field: 'lastpayment_date', title: "回款时间",sortable:true , width: "70px", formatter: function (val, row, index) {
+                    if (val == null)return "";
+                    var d= new Date(val).Format("yyyy-MM-dd");
+                    if(d=="1970-01-01")return "";
+                    return d;
+
+                } },
+                {
+                    field: 'do', title: "操作", width: "150px", formatter: function (value, row, index) {
+                    if (row.isdelete == 1 ) {
+                    return '<span style="margin-left:10px;">已删除</span>';
+                }
+                    if (row.status == 2 && row.balance_type!=5) {
+                    return '<span style="margin-left:10px;">异常数据</span><a href="#" style="color:red;margin-left:20px;" iconCls="icon-add" onclick="approval(3,\'' + row.balance_id + '\',this);return false;">删除</a>';
+                }
+                    if (row.status ==   3) {
+                    var hl = '<span style="margin-left:10px;">转账失败</span>';
+                    if(row.balance_type!=5){
+                    hl+='<a href="#" style="color:red;margin-left:20px;" iconCls="icon-add" onclick="approval(4,\'' + row.balance_id + '\',this);return false;">重新处理</a>';
+                }
+                    return hl;
+                }
+
+                }
+                }
+
+                ];
+        var columns=[
+//                    { field: 'balance_no', title: "结算单号", width: "160px" },
+
+            { field: 'transfer_date', title: "结算日期",sortable:true , width: "70px" ,formatter:function(val,row,index){
+                if(val==null)return "";
+                return new Date(val).Format("yyyy-MM-dd");
+            }
+            },
+            { field: 'rebate_price', title: "结算金额",sortable:true , width: "80px",formatter:function(val,row,index){
+                return _main.outputMoney(val + "", false, true);
+            } },
+
+            {
+                field: 'realsell_date', title: "实销日期",sortable:true , width: "70px", formatter: function (val, row, index) {
+                if (val == null)return "";
+                return new Date(val).Format("yyyy-MM-dd");
+            }
+            },
+
+            { field: 'seller_name', title: "顾问",sortable:true , width: "60px" },
+            { field: 'picked_date', title: "提车时间",sortable:true , width: "100px", formatter: function (val, row, index) {
+                if (val == null)return "";
+                var d= new Date(val).Format("yyyy-MM-dd");
+                if(d=="1970-01-01")return "";
+                return d;
+            } },
+            {
+                field: 'balance_source', title: "数据来源",sortable:true , width: "80px",formatter:function(val,row,index) {
+                if (row.balance_source == 1) {
+                    return '线上';
+                }
+                if (row.balance_source ==2) {
+                    return '导入';
+                }
+                return "";
+                }
+                },
+                { field: 'remark', title: "备注",sortable:true , width: "100px" },
+                { field: 'create_date', title: "创建时间",sortable:true , width: "70px",formatter:function(val,row,index){
+                    if(val==null)return "";
+                    return new Date(val).Format("yyyy-MM-dd");
+                }
+                },
+                { field: 'payto', title: "结算对象",sortable:true , width: "120px",formatter:function(val,row,index){
+                    if (row.payto == 1) {
+                    return '个人';
+                }
+                    else if(row.payto == 2) {
+                    return '经销商';
+                }
+                    else if(row.payto ==  3) {
+                    return '汽车之家';
+                }
+                }
+                },
+
+                { field: 't_pay_status', title: "T+1转账状态",sortable:true , width: "120px",formatter:function(val,row,index){
+                    if (row.t_pay_status == 1) {
+                    return '待转账';
+                }
+                    else if(row.t_pay_status == 2) {
+                    return '已转账';
+                }
+                    else if(row.t_pay_status ==  3) {
+                    var hl = '转账失败';
+                    hl+='&nbsp;&nbsp;<a href="#" style="color:red;" iconCls="icon-add" onclick="approval(5,\'' + row.balance_id + '\',this);return false;">重新处理</a>';
+                    return hl;
+                }
+                }
+                },
+                { field: 't_waitpaytime', title: "T+1待结算日期",sortable:true , width: "110px", formatter: function (val, row, index) {
+                    if (val == null)return "";
+                    var d= new Date(val).Format("yyyy-MM-dd");
+                    if(d=="1970-01-01")return "";
+                    return d;
+                }
+                },
+                { field: 't_realitypaytime', title: "T+1实际结算日期",sortable:true , width: "110px", formatter: function (val, row, index) {
+                    if (val == null)return "";
+                    var d= new Date(val).Format("yyyy-MM-dd");
+                    if(d=="1970-01-01")return "";
+                    return d;
+                }
+                },
+
+                { field: 'import_date', title: "导入时间",sortable:true , width: "100px", formatter: function (val, row, index) {
+                    if (val == null)return "";
+                    var d= new Date(val).Format("yyyy-MM-dd hh:mm:ss");
+                    if(d=="1970-01-01 00:00:00")return "";
+                    return d;
+                }
+                },
+
+                { field: 'import_username', title: "导入人姓名",sortable:true , width: "100px" },
+
+                { field: 'import_remark', title: "导入备注",sortable:true , width: "160px" }
+                ];
+        s=new column_select("aaa111112","selcolbtn",frozenColumns,columns,resetCallback);
+    }
+
+    function resetCallback(cols1,cols2){
+//        alert(JSON.stringify(cols1));
+//        alert(JSON.stringify(cols2));
+        $("#a").html("");
+        for(var i in cols1)
+        {
+            $("#a").html($("#a").html()+cols1[i].title+"       ");
+        }
+        $("#a").html($("#a").html()+"<br/><br/><br/><br/>       ");
+        for(var i in cols2)
+        {
+            $("#a").html($("#a").html()+cols2[i].title+"       ");
+        }
+    }
+
+
+
+//    function get() {
+    //        for(var i in cols)
+    //        {
+    //            $("#a").html($("#a").html()+i+"-----------------------------------------<br/>");
+    //            for(var a in cols[i])
+    //            {
+    //                $("#a").html($("#a").html()+a+"<br/>");
+    //            }
+    //        }
+//    }
+
+
+
+</script>
+<br>
+<div id="a"></div>
+<!--<input type="button" value="test1" onclick="test1()">-->
+<!--<input type="button" value="get1" onclick="get1()">-->
+</html>

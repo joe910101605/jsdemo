@@ -1,0 +1,286 @@
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=utf8" />
+	<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+	
+    <script type="text/javascript" src="js/easyui/jquery.easyui.min.js"></script>
+
+    <link href="js/easyui/themes/icon.css" rel="stylesheet"/>
+    <link href="js/easyui/themes/color.css" rel="stylesheet"/>
+    <link href="js/easyui/themes/gray/easyui.css" rel="stylesheet"/>
+	
+	<script type="text/javascript" src="jquery-common-extends.js"></script>
+	
+	<script type="text/javascript" src="js/jquery-easyui-col-extends.js"></script>
+	<script type="text/javascript" src="js/confrim2.js"></script>
+	<script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
+	
+	<script type="text/javascript" src="js\select2\js\select2.full.js"></script>
+	<script type="text/javascript" src="js\select2\js\select2_extends.js"></script>
+    <link href="js\select2\css\select2.full.css" rel="stylesheet"/>
+	
+    <script src="js/ztree/js/jquery.ztree.all.min.js"></script>
+    <script src="js/ztree/js/ztree_extends.js"></script>
+    <link href="js/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+	
+    <script src="js/uploadify/jquery.uploadify.js"></script>
+    <link href="js/uploadify/uploadify.css" rel="stylesheet" />
+	
+	<style type="text/css">
+		input{
+			margin:5px;
+		}
+	</style>
+
+</head>
+<body>
+<!--简单提醒，弹层，加载中,格式化控件-->
+	<script type="text/javascript">
+//简单提醒，弹层，加载中
+		$("body").append("<input type='button' value='消息提醒' onclick='$.alert(\"消息提醒\");'/>");//$.alert("消息提醒");
+		$("body").append("<input type='button' value='错误提醒' onclick='$.error(\"错误提醒\");'/>");//$.error("错误提醒");
+		$("body").append("<input type='button' value='确认提醒' onclick='$.confirm(\"确定吗\",function(r){if(r){$.alert(\"确定\")}else{$.alert(\"不确定\")}});'/>");//$.confirm("确定吗",function(r){if(r){$.alert("确定")}else{$.alert("不确定")}});
+		$("body").append("<input type='button' value='确认提醒2' onclick='$.confirm2(\"testaaaa\");'/>");//$.confirm2("testaaaa");
+		$("body").append("<input type='button' value='加载中' onclick='$.loading(\"加载中，请稍候.........\");setTimeout(\"$.loadend()\",3000);'/>");
+		$("body").append("<input type='button' value='弹层' onclick='$.dialog(\"标题\",\"inner.html\",300);//setTimeout(\"$.closedialog()\",5000);'/>");
+		$("body").append("<hr/>");
+//日期，金额，数字控件		
+		$("body").append("<input class='date' type='text' style='width:100px;' placeholder='日期控件'/>");//class设置为date
+		$("body").append("<input class='money' type='text' style='width:100px;' placeholder='金额控件'/>");//class设置为money
+		$("body").append("<input class='num' type='text' style='width:100px;' placeholder='数字控件'/>");//class设置为num
+		$("body").append("<hr/>");
+		//$("body").append("<input id='date1' type='text' style='width:100px;'/>");$("#date1").date();
+		$("body").append("<input type='button' value='格式化日期' onclick='$.alert($.formatDate(new Date(),\"yyyy-MM-dd hh:mm:ss\"));'/>");
+		$("body").append("<input type='button' value='格式化金额' onclick='$.alert($.formatMoney(\"12345asd678.12345\",false,true));'/>");
+		$("body").append("<input type='button' value='格式化数字' onclick='$.alert($.formatMoney(\"12345asd678.12345\",false,false));'/>");
+		
+		$("body").append("<br/><br/><hr/>");
+		
+	</script>
+	
+	<!--人员选择控件-->
+	<!--
+	功能描述：可搜索下拉列表
+		使用方法：
+		1.需要引用 
+			<script type="text/javascript" src="js/jquery-easyui-col-extends.js"></script>
+		2.定义data数据集
+		3.$("[tag='selectuser]").select_user({url:"userdata.json", width:50, delay:200, callback:function(){alert("点击")}});
+	-->
+	<script type="text/javascript">			
+
+		$("body").append("<input tag='selectuser' type='text'/>");
+		$("[tag='selectuser']").select_user({url:"userdata.json", width:50, delay:200, callback:function(){}});
+		//select2_extends.init($("[tag='selectuser']"), {url:"userdata.json", width:50, delay:200, callback:function(){}});
+		
+		
+		$("body").append("<hr/><br/><br/>");
+		
+	</script>
+	
+	<!--下拉列表树控件-->
+	<!--
+	功能描述：下拉列表树，可搜索
+		使用方法：
+		1.需要引用 
+			<script src="js/ztree/js/jquery.ztree.all.min.js"></script>
+			<script src="js/ztree/js/ztree_extends.js"></script>
+			<link href="css/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+		2.定义data数据集
+		3.
+			var option={};
+			option.method="init";//必传[init|getvalue] init:初始化  getvalue:取值
+			option.attrname="name";//method为getvalue时必传,与data中的列对应，取对应列值
+			option.data=data; //必传 数据源
+			option.showsearchchild = false; //搜索结果是否显示子节点
+			option.callback = callback;  //点击节点时回调
+			option.clearcallback = clearcallback;//点击清空时回调
+			option.width=180;//控件最小宽度
+			option.height=400;		//控件最小高度
+			$("[tag='select_tree']").select_tree(option);//初始化
+			var value =$("[tag='select_tree']").select_tree({"method":"getvalue","attrname":"name"});//取值
+	-->
+	<script type="text/javascript">
+	
+		var data = [
+            { id: 0, pId: 0, name: "全国",myattr:"quanguo" , open: true, chkDisabled: true },
+            { id: 1, pId: 0, name: "北京",myattr:"beijing" },
+            { id: 2, pId: 0, name: "天津", myattr: "tianjin" },
+            { id: 3, pId: 0, name: "上海", myattr: "shanghai" },
+            { id: 6, pId: 0, name: "重庆" },
+            { id: 4, pId: 0, name: "河北省", open: true, chkDisabled: true },
+            { id: 41, pId: 4, name: "石家庄" },
+            { id: 42, pId: 4, name: "保定" },
+            { id: 43, pId: 4, name: "邯郸邯郸邯郸邯郸邯郸邯郸邯郸邯郸邯郸邯郸" },
+            { id: 44, pId: 4, name: "承德" },
+            { id: 5, pId: 0, name: "广东省", open: true, chkDisabled: true },
+            { id: 51, pId: 5, name: "广州" },
+            { id: 52, pId: 5, name: "深圳广" },
+            { id: 53, pId: 5, name: "东广莞" },
+            { id: 54, pId: 5, name: "佛山" },
+            { id: 6, pId: 0, name: "福建省", open: true, chkDisabled: true },
+            { id: 61, pId: 6, name: "福州" },
+            { id: 62, pId: 6, name: "厦门" },
+            { id: 63, pId: 6, name: "泉州" },
+            { id: 64, pId: 6, name: "三明" }
+        ];
+		 function callback(nodes,obj) {
+            var newpid = nodes[0].id;
+            var oldpid = obj.attr("p_id");
+            if (newpid == oldpid) {
+                alert("一样的，啥也不干");
+                return false;
+            }
+            //啥都干的时候的代码
+            alert("为" + nodes[0].name + "干了点啥");
+            return true;
+        }
+
+        function clearcallback() {
+            if (confirm("清空会清除其它东西，要清空么？")) {
+                alert("清空了其它的东西");
+                return true;
+            }
+            else {
+                return false;
+            }
+            return true;            
+        }
+		function getvalue(){
+			var option={};
+			option.method="getvalue";//必传
+			option.attrname="name";//method为getvalue时必传,与data中的列对应
+			//---------------------------------------------------------------------------------------
+			var name =$("[tag='select_tree']").select_tree(option)
+			alert(name);
+		}
+		var option={};
+		option.method="init";//必传
+		option.attrname="name";//method为getvalue时必传,与data中的列对应
+		option.data=data; //必传
+        option.showsearchchild = false;
+        option.callback = callback;
+        option.clearcallback = clearcallback;
+		option.width=180;
+		option.height=400;		
+		$("body").append("<input tag='select_tree' type='text'/><input type='button' value='获取' onclick='getvalue()'/>");
+		
+		//---------------------------------------------------------------------------------------
+		$("[tag='select_tree']").select_tree(option);
+		
+		
+		$("body").append("<hr/><br/><br/>");
+	</script>
+	
+	<!--上传控件-->
+	<script type="text/javascript">
+		$("body").append("<div  id='uploader' ></div>");
+		var options = {};
+		options.uploader="data.json";
+		options.buttonText="上传文件";
+		options.fileTypeDesc='*.xls;*.xlsx;*.csv;*.js;*.txt';
+		options.fileTypeExts='*.xls;*.xlsx;*.csv;*.js;*.txt';
+		options.onUploadSuccess=function (event, response, status) {};
+		$("#uploader").upload(options);
+	</script>
+
+	<!--多选/单选下拉列表-->
+	<script type="text/javascript">
+		$("body").append("<hr/><br/><br/>");
+		$("body").append("<select id='select_multi' style='width:70%;'><option>aaaaaa</option><option>bbbbbb</option><option>cccccc</option><option>dddddd</option></select>");
+		$("#select_multi").select_multi();
+		$("body").append("<br/><br/>");
+		$("body").append("<select id='select_single' style='width:70%;'><option>aaaaaa</option><option>bbbbbb</option><option>cccccc</option><option>dddddd</option></select>");
+		$("#select_single").select();
+	</script>
+	
+	
+	<!--datagrid扩展方法,增加自定义列的功能-->
+	<!--
+	功能描述：datagrid扩展方法,增加自定义列的功能
+		使用方法：
+		1.需要引用jquery-easyui-col-extends.js
+		2.在正常使用datagrid的基础上，把datagrid方法修改为 datagrid_selcol 方法		
+		3.datagrid参数中增加参数
+			datagrid_selcol_btn:"datagrid_selcol_btn",//选择列按钮id（按钮自行添加）,默认datagrid_selcol_btn
+			identifier:"auth_userlist_jsp"//当前列表唯一标识（无默认）
+	-->
+	<script type="text/javascript">
+	//column_select demo
+		/*
+		var frozenColumns=[
+            { field: 'order_id', title: "订单号",sortable:true , width: "105px" },
+            {
+                field: 'order_date', title: "订单日期",sortable:true , width: "70px", formatter: function (val, row, index) {
+                if (val == null)return "";
+                return new Date(val).Format("yyyy-MM-dd");
+            }
+            }];
+        var columns=[
+            { field: 'transfer_date', title: "结算日期",sortable:true , width: "70px" ,formatter:function(val,row,index){
+                if(val==null)return "";
+                return new Date(val).Format("yyyy-MM-dd");
+            }
+            },
+            { field: 'rebate_price', title: "结算金额",sortable:true , width: "80px",formatter:function(val,row,index){
+                return _main.outputMoney(val + "", false, true);
+            } }];
+        var s=new column_select("aaa111112","selcolbtn",frozenColumns,columns,function(cols1,cols2){
+				$("#a").remove();
+				$("#selcolbtn").remove();
+				$("body").append("<div id='a'></div><input type='button' value='自定义表头' id='selcolbtn'>");
+				$("#a").html("");
+				for(var i in cols1)
+				{
+					$("#a").html($("#a").html()+cols1[i].title+"       ");
+				}
+				$("#a").html($("#a").html()+"<br/><br/><br/><br/>       ");
+				for(var i in cols2)
+				{
+					$("#a").html($("#a").html()+cols2[i].title+"       ");
+				}
+		});
+		//column_select demo end
+		*/
+	/*-----------------------------------------------------------------------------------------------------------------------
+		$(function(){
+			var frozenColumns=[
+				{ field: 'user_name', title: "姓名",sortable:true , width: "105px" },
+				{field: 'user_code', title: "工号",sortable:true , width: "70px"}
+			];
+			var columns=[
+				{ field: 'last_modify_date', title: "创建日期",sortable:true , width: "70px" ,formatter:function(val,row,index){
+					if(val==null)return "";
+					return '2016-01-10';//new Date(val).Format("yyyy-MM-dd");
+				}
+				},
+				{ field: 'rebate_price', title: "结算金额",sortable:true , width: "80px",formatter:function(val,row,index){
+					return "";//_main.outputMoney(val + "", false, true);
+				} }];
+			loaddata(frozenColumns,columns);
+		});
+		function loaddata(_frozenColumns, _columns) {
+			$("#listtb").remove();
+			$("body").append("<br/><br/><br/><br/><br/><br/>");
+			$("body").append("<input type='button' id='datagrid_selcol_btn' value='选择列'/> <div id='listtb'></div>");
+            
+            $('#listtb').datagrid_selcol("load",
+				{
+					url:'/data.json',
+					frozenColumns:_frozenColumns,
+					columns:_columns,				
+					queryParams: GetPars(),					
+					datagrid_selcol_btn:"datagrid_selcol_btn",//选择列按钮
+					identifier:"auth_userlist_jsp"//当前列表唯一标识
+				});
+        }
+
+        function Query() {
+            $('#listtb').datagrid_selcol('query', {queryParams: GetPars()});
+        }
+		function GetPars(){}
+		-----------------------------------------------------------------------------------------------------------------------*/
+	</script>
+	
+</body>
+</html>
